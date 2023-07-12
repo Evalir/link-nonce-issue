@@ -2,8 +2,8 @@
 pragma solidity ^0.8.13;
 
 library A {
-    function increment(uint256 number) external pure returns (uint256) {
-        return number + 1;
+    function increment(uint256 number, uint256 number2) external pure returns (uint256) {
+        return number + number2;
     }
 }
 
@@ -15,13 +15,17 @@ library B {
 
 library C {
     function double(uint256 number) external pure returns (uint256) {
-        return number * 2;
+        return A.increment(number, 0) + A.increment(number, 0);
     }
 }
 
 library D {
     function half(uint256 number) external pure returns (uint256) {
         return number / 2;
+    }
+
+    function sub2(uint256 number) external pure returns (uint256) {
+        return B.subtract(number);
     }
 }
 
@@ -32,6 +36,9 @@ library E {
         returns (uint256)
     {
         return number**exponent;
+    }
+    function quadruple(uint256 number) external pure returns (uint256) {
+        return C.double(number) + C.double(number);
     }
 }
 
@@ -48,7 +55,7 @@ contract Counter {
 
     function add(uint256 num) external returns (uint256) {
         number = num;
-        return A.increment(num);
+        return A.increment(num, 1);
     }
 
     function sub(uint256 num) external returns (uint256) {
@@ -69,5 +76,15 @@ contract Counter {
     function pow(uint256 num, uint256 exponent) external returns (uint256) {
         number = num;
         return E.pow(num, exponent);
+    }
+
+    function sub2(uint256 num) external returns (uint256) {
+        number = num;
+        return D.sub2(num);
+    }
+
+    function quadruple(uint256 num) external returns (uint256) {
+        number = num;
+        return E.quadruple(num);
     }
 }
